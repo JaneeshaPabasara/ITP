@@ -506,6 +506,5 @@ class MemoryStorage {
     }
 }
 
-// Use memory storage for now since MongoDB Atlas connection requires IP whitelisting
-// In production, the MongoDB connection would be configured properly
+
 export const storage = new DatabaseStorage();
