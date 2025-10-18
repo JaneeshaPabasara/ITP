@@ -3,10 +3,23 @@ import express from "express";
 import {registerRoutes} from "./routes.js";
 import {setupVite, serveStatic, log} from "./vite.js";
 import {connectDB} from "./db.js";
+import cors from "cors";
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
+// Log all registered routes after setup for debugging
+app.use((req, res, next) => {
+  console.log(`Incoming request: ${req.method} ${req.url}`);
+  next();
+});
+app.use((req, res, next) => {
+  if (req.path === "/api/login" && req.method === "POST") {
+    console.log("Incoming login body:", req.body);
+  }
+  next();
+});
 
 app.use((req, res, next) => {
     const start = Date.now();
@@ -47,6 +60,11 @@ app.use((req, res, next) => {
         log("Failed to connect to MongoDB, continuing with application...");
     }
 
+    // Test route for debugging API connectivity
+    app.get("/api/test", (req, res) => {
+      res.json({ message: "API working properly ✅" });
+    });
+
     const server = await registerRoutes(app);
 
     // importantly only setup vite in development and after
@@ -67,7 +85,6 @@ app.use((req, res, next) => {
         throw err;
     });
 
-    // Use port 5000 to match vite.config.js
     const port = parseInt(process.env.PORT || '5000', 10);
     server.listen(port, "0.0.0.0", () => {
         log(`serving on port ${port}`);

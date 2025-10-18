@@ -90,3 +90,64 @@ export const insertReportSchema = z.object({
     type: z.enum(['inventory', 'low-stock', 'movements', 'supplier-analysis']),
     dateRange: z.string()
 });
+
+// Cart Item Schema
+const cartItemSchema = new Schema({
+    partId: {type: Schema.Types.ObjectId, ref: 'Part', required: true},
+    quantity: {type: Number, required: true, min: 1},
+    requestedBy: {type: String, required: true}, // User who requested the item
+    notes: {type: String}, // Optional notes for the request
+    status: {type: String, enum: ['pending', 'approved', 'rejected', 'fulfilled'], default: 'pending'}
+}, {timestamps: true});
+
+export const CartItemModel = mongoose.model('CartItem', cartItemSchema);
+
+// Order Schema
+const orderSchema = new Schema({
+    orderNumber: {type: String, required: true, unique: true},
+    invoiceNumber: {type: String, unique: true, sparse: true}, // sparse: true allows multiple null values
+    customerName: {type: String, required: true},
+    customerEmail: {type: String, required: true},
+    customerPhone: {type: String},
+    shippingAddress: {type: String},
+    notes: {type: String},
+    items: [{
+        partId: {type: Schema.Types.ObjectId, ref: 'Part', required: true},
+        partName: {type: String, required: true},
+        partNumber: {type: String, required: true},
+        quantity: {type: Number, required: true},
+        unitPrice: {type: Number, required: true},
+        totalPrice: {type: Number, required: true}
+    }],
+    totalAmount: {type: Number, required: true},
+    status: {type: String, enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'], default: 'pending'},
+    invoiceGenerated: {type: Boolean, default: false}
+}, {timestamps: true});
+
+export const OrderModel = mongoose.model('Order', orderSchema);
+
+export const insertCartItemSchema = z.object({
+    partId: z.string(),
+    quantity: z.number().min(1),
+    requestedBy: z.string(),
+    notes: z.string().optional(),
+    status: z.enum(['pending', 'approved', 'rejected', 'fulfilled']).optional()
+});
+
+
+export const insertOrderSchema = z.object({
+    customerName: z.string(),
+    customerEmail: z.string().email(),
+    customerPhone: z.string().optional(),
+    shippingAddress: z.string().optional(),
+    notes: z.string().optional(),
+    items: z.array(z.object({
+        partId: z.string(),
+        partName: z.string(),
+        partNumber: z.string(),
+        quantity: z.number().min(1),
+        unitPrice: z.number().min(0),
+        totalPrice: z.number().min(0)
+    })),
+    totalAmount: z.number().min(0)
+});
