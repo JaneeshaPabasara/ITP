@@ -14,7 +14,7 @@ function Users({ onBack, goToProfile, goToCreateUser, onLogout, goToMyProfile })
   const navigate = useNavigate();
 
 const handleGoToCreateUser = () => {
-  navigate("/CreateUser");
+  navigate("/createuser");
 };
 
   useEffect(() => {
@@ -80,6 +80,15 @@ const handleGoToCreateUser = () => {
   const designations = [...new Set(users.map((u) => u.designation).filter(Boolean))];
   const activeUsers = users.filter(user => user.status?.toLowerCase() === "active").length;
   const inactiveUsers = users.filter(user => user.status?.toLowerCase() === "inactive").length;
+
+  // Safe wrapper for goToProfile to prevent TypeError
+  const handleGoToProfile = (userId) => {
+    if (typeof goToProfile === "function") {
+      goToProfile(userId);
+    } else {
+      navigate(`/user/${userId}`);
+    }
+  };
 
   return (
     <>
@@ -168,7 +177,7 @@ const handleGoToCreateUser = () => {
                       className={`cursor-pointer transition-colors duration-300 ease-in-out ${
                         idx % 2 === 0 ? "bg-gray-50 hover:bg-gray-100" : "bg-white hover:bg-gray-200"
                       } text-gray-900`}
-                      onClick={() => goToProfile(user._id)}
+                      onClick={() => handleGoToProfile(user._id)}
                     >
                       <td className="p-4 border-b border-gray-200 font-semibold">{idx + 1}</td>
                       <td className="p-4 border-b border-gray-200">{user.employeeNumber || "-"}</td>

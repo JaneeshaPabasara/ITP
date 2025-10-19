@@ -13,7 +13,7 @@ function Login({ onLoginSuccess }) {
     console.log("Submitting login:", { email, password });
 
     try {
-      const response = await axios.post("http://localhost:5000/api/login", {
+      const response = await axios.post("http://localhost:5001/api/login", {
         email,
         password,
       });
@@ -51,8 +51,8 @@ function Login({ onLoginSuccess }) {
           case "Vehicle":
             navigate("/vehicleAppointment");
             break;
-          case "Other":
-            navigate("/users");
+          case "R005":
+            navigate("/Users");
             break;
           default:
             navigate("/myProfile");

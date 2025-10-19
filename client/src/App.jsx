@@ -18,6 +18,7 @@ import Purchasing from "./purchasing/frontend/src/modules/supplier/pages/Dashboa
 import Cashier from "./sales/salesPage.jsx";
 import Users from "./UMS/Users.jsx";
 import CreateUser from "./UMS/CreateUser.jsx";
+import ProfileOverview from "./UMS/ProfileOverview";
 
 function AppWrapper() {
   const [userRole, setUserRole] = useState(localStorage.getItem("role") || null);
@@ -97,7 +98,7 @@ function AppWrapper() {
             <Route
               path="/users"
               element={
-                userRole === "Other" ? (
+                (userRole === "Other" || userRole === "R005") ? (
                   <Users userId={localStorage.getItem("userId")} onLogout={handleLogout} />
                 ) : (
                   <Navigate to="/login" replace />
@@ -105,9 +106,11 @@ function AppWrapper() {
               }
             />
 
+            <Route path="/user/:id" element={<ProfileOverview onBack={() => navigate(-1)} onLogout={handleLogout} />} />
+
             {/* My Profile */}
             <Route
-              path="/myProfile"
+              path="/myprofile"
               element={
                 userRole ? (
                   <MyProfile userId={localStorage.getItem("userId")} onLogout={handleLogout} />
@@ -117,15 +120,12 @@ function AppWrapper() {
               }
             />
 
+            <Route path="/createuser" element={<CreateUser onBack={() => navigate(-1)} onLogout={handleLogout} />} />
+
             {/* Default */}
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <Routes>
-  <Route path="/users" element={<Users />} />
-  <Route path="/CreateUser" element={<CreateUser />} />
-</Routes>
-
         </ThemeProvider>
       </TooltipProvider>
     </QueryClientProvider>
