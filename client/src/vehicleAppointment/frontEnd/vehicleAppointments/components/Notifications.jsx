@@ -12,7 +12,7 @@ const Notifications = () => {
 
     const fetchNotifications = async () => {
         try {
-            const res = await fetch("http://localhost:5000/api/notifications");
+            const res = await fetch("http://localhost:5001/api/notifications");
             const data = await res.json();
             setNotifications(data);
         } catch (err) {
@@ -22,7 +22,7 @@ const Notifications = () => {
 
     const markAsRead = async (id) => {
         try {
-            await fetch(`http://localhost:5000/api/notifications/${id}/read`, {
+            await fetch(`http://localhost:5001/api/notifications/${id}/read`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
             });

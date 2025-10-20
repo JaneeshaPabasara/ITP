@@ -85,7 +85,7 @@ app.use((req, res, next) => {
         throw err;
     });
 
-    const port = parseInt(process.env.PORT || '5000', 10);
+    const port = parseInt(process.env.PORT || '5001', 10);
     server.listen(port, "0.0.0.0", () => {
         log(`serving on port ${port}`);
     });

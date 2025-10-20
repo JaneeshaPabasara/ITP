@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"cross-env PORT=5002 npm run dev:frontend\" \"cross-env PORT=5000 npm run dev:backend\"",
+    "dev": "concurrently \"cross-env PORT=5002 npm run dev:frontend\" \"cross-env PORT=5001 npm run dev:backend\"",
     "dev:frontend": "vite",
     "dev:backend": "cross-env NODE_ENV=development node server/index.js"
   },
@@ -41,6 +41,7 @@
     "pdfkit": "^0.17.2",
     "postcss": "^8.5.6",
     "react": "^18.2.0",
+    "react-countup": "^6.5.3",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.63.0",
     "react-icons": "^5.5.0",
