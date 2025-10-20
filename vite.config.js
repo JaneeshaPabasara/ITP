@@ -23,7 +23,7 @@ export default defineConfig({
     host: "0.0.0.0",
     port: 5002, // frontend
     proxy: {
-      "/api": "http://localhost:5000", // backend
+      "/api": "http://localhost:5001", // backend
     },
   },
 });
